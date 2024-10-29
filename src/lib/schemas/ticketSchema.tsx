@@ -33,8 +33,9 @@ export const createUserSchema = z.object({
 });
 
 export const loginUserSchema = z.object({
-    username: z.union([z.string().min(5, "Please enter at least 5 characters"), z.string().email()]),
-    password: z.string().min(5, "Please enter at least 5 characters")
+    username: z.string().optional(),
+    email: z.string().email().optional(),
+    password: z.string()
 })
 
 export const ticketSchema = z.object({

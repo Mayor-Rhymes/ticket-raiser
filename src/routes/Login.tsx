@@ -31,18 +31,39 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useUserStore } from "@/states/userStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const { login } = useUserStore();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof loginUserSchema>>({
     resolver: zodResolver(loginUserSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginUserSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof loginUserSchema>) => {
+    const response = await axios.post(
+      "http://localhost:3000/api/auth/login",
+      values,
+      {
+        withCredentials: true
+      }
+    )
+
+    
+    
+    login(
+      response.data.user.id,
+      response.data.user.email,
+      response.data.user.username
+    );
+
+    navigate("/")
   };
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -62,10 +83,10 @@ export default function Login() {
             >
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your email address or username"
@@ -117,16 +138,21 @@ export default function Login() {
                 )}
               />
 
-
-              <Link to="forgot-password" className="text-gray-400 text-sm hover:text-black">Forgot Password?</Link>
+              <Link
+                to="forgot-password"
+                className="text-gray-400 text-sm hover:text-black"
+              >
+                Forgot Password?
+              </Link>
               <Button type="submit" className="py-4">
                 Login
               </Button>
 
-              
-
               <p className="text-center">
-                Don't have an account? <Link to="/signup" className="text-gray-600">Signup</Link>
+                Don't have an account?{" "}
+                <Link to="/signup" className="text-gray-600">
+                  Signup
+                </Link>
               </p>
             </form>
           </Form>
