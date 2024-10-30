@@ -9,24 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createUserSchema,
-  departmentArr,
-  loginUserSchema,
-} from "@/lib/schemas/ticketSchema";
+import { loginUserSchema } from "@/lib/schemas/ticketSchema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
@@ -34,9 +20,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useUserStore } from "@/states/userStore";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Login() {
-  const { login } = useUserStore();
+  const { login, user } = useUserStore();
+
+  
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof loginUserSchema>>({
     resolver: zodResolver(loginUserSchema),
@@ -47,23 +36,26 @@ export default function Login() {
   });
 
   const onSubmit = async (values: z.infer<typeof loginUserSchema>) => {
-    const response = await axios.post(
-      "http://localhost:3000/api/auth/login",
-      values,
-      {
-        withCredentials: true
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        values,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        login(
+          response.data.user.id,
+          response.data.user.email,
+          response.data.user.username
+        );
+        toast.success("Login successful.");
+        navigate("/");
       }
-    )
-
-    
-    
-    login(
-      response.data.user.id,
-      response.data.user.email,
-      response.data.user.username
-    );
-
-    navigate("/")
+    } catch (err) {
+      toast.error("Login attempt unsuccessful.");
+    }
   };
 
   const [passwordVisible, setPasswordVisible] = useState(false);

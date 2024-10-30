@@ -9,6 +9,9 @@ import TicketAnalytics from "./routes/TicketAnalytics.tsx";
 import Login from "./routes/Login.tsx";
 import Signup from "./routes/Signup.tsx";
 import Explore from "./routes/Explore.tsx";
+import { Toaster } from "./components/ui/sonner.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import UserProfile from "./routes/UserProfile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,28 +20,32 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <ProtectedRoute><Home /></ProtectedRoute>,
       },
 
       {
         path: "/create-ticket",
-        element: <CreateTicket />
+        element: <ProtectedRoute><CreateTicket /></ProtectedRoute>,
       },
       {
         path: "/ticket-analytics",
-        element: <TicketAnalytics />
+        element: <ProtectedRoute><TicketAnalytics /></ProtectedRoute>,
       },
       {
         path: "/explore",
-        element: <Explore />
+        element: <ProtectedRoute><Explore /></ProtectedRoute>,
+      },
+      {
+        path: "/userprofile",
+        element: <ProtectedRoute><UserProfile /></ProtectedRoute>
       },
       {
         path: "/login",
-        element: <Login />
+        element: <Login />,
       },
       {
         path: "/signup",
-        element: <Signup />
+        element: <Signup />,
       },
     ],
   },
@@ -47,5 +54,15 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
+    <Toaster
+      toastOptions={{
+        classNames: {
+          error: "bg-red-400",
+          success: "text-green-400",
+          warning: "text-yellow-400",
+          info: "bg-blue-400",
+        },
+      }}
+    />
   </StrictMode>
 );
