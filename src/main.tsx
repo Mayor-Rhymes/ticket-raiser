@@ -12,7 +12,11 @@ import Explore from "./routes/Explore.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import UserProfile from "./routes/UserProfile.tsx";
-
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,24 +24,44 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ProtectedRoute><Home /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
 
       {
         path: "/create-ticket",
-        element: <ProtectedRoute><CreateTicket /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <CreateTicket />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/ticket-analytics",
-        element: <ProtectedRoute><TicketAnalytics /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <TicketAnalytics />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/explore",
-        element: <ProtectedRoute><Explore /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <Explore />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/userprofile",
-        element: <ProtectedRoute><UserProfile /></ProtectedRoute>
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/login",
@@ -51,18 +75,21 @@ const router = createBrowserRouter([
   },
 ]);
 
+const client = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
-    <Toaster
-      toastOptions={{
-        classNames: {
-          error: "bg-red-400",
-          success: "text-green-400",
-          warning: "text-yellow-400",
-          info: "bg-blue-400",
-        },
-      }}
-    />
+    <QueryClientProvider client={client}>
+      <RouterProvider router={router} />
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: "bg-red-400",
+            success: "text-green-400",
+            warning: "text-yellow-400",
+            info: "bg-blue-400",
+          },
+        }}
+      />
+    </QueryClientProvider>
   </StrictMode>
 );

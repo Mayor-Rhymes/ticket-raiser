@@ -6,8 +6,14 @@ import { Filter, Plus } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { tickets, Ticket } from "@/lib/fakedata/tickets-data";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function Home() {
+  const { isPending, data, error } = useQuery({
+    queryKey: ["ticketData"],
+    queryFn: () => axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets`).then((res) => res.data),
+  });
   const [isAllTickets, setIsAllTickets] = useState(true);
   const [isOpenTickets, setIsOpenTickets] = useState(false);
   const [isPendingTickets, setIsPendingTickets] = useState(false);
@@ -93,63 +99,65 @@ export default function Home() {
     console.log(ticketState);
   };
 
+
+  console.log(data);
+  // console.log(import.meta.env.VITE_BACKEND_URL);
+
   return (
     <div>
-      {ticketState.length > 0 && (
-        <div className="flex gap-4 py-4 pl-2 items-center">
-          <Button
-            className={cn(
-              "hover:text-white",
-              isAllTickets ? "bg-black text-white" : "bg-white text-black"
-            )}
-            onClick={handleAllTickets}
-          >
-            All Tickets ({tickets.length})
-          </Button>
-          <Button
-            className={cn(
-              "hover:text-white",
-              isOpenTickets ? "bg-black text-white" : "bg-white text-black"
-            )}
-            onClick={handleOpenTickets}
-          >
-            Open Tickets (
-            {tickets.filter((ticket) => ticket.status === "open").length})
-          </Button>
+      <div className="flex gap-4 py-4 pl-2 items-center">
+        <Button
+          className={cn(
+            "hover:text-white",
+            isAllTickets ? "bg-black text-white" : "bg-white text-black"
+          )}
+          onClick={handleAllTickets}
+        >
+          All Tickets ({tickets.length})
+        </Button>
+        <Button
+          className={cn(
+            "hover:text-white",
+            isOpenTickets ? "bg-black text-white" : "bg-white text-black"
+          )}
+          onClick={handleOpenTickets}
+        >
+          Open Tickets (
+          {tickets.filter((ticket) => ticket.status === "open").length})
+        </Button>
 
-          <Button
-            className={cn(
-              "hover:text-white",
-              isPendingTickets ? "bg-black text-white" : "bg-white text-black"
-            )}
-            onClick={handlePendingTickets}
-          >
-            Pending Tickets (
-            {tickets.filter((ticket) => ticket.status === "pending").length})
-          </Button>
+        <Button
+          className={cn(
+            "hover:text-white",
+            isPendingTickets ? "bg-black text-white" : "bg-white text-black"
+          )}
+          onClick={handlePendingTickets}
+        >
+          Pending Tickets (
+          {tickets.filter((ticket) => ticket.status === "pending").length})
+        </Button>
 
-          <Button
-            className={cn(
-              "hover:text-white",
-              isClosedTickets ? "bg-black text-white" : "bg-white text-black"
-            )}
-            onClick={handleClosedTickets}
-          >
-            Closed Tickets (
-            {tickets.filter((ticket) => ticket.status === "closed").length})
-          </Button>
+        <Button
+          className={cn(
+            "hover:text-white",
+            isClosedTickets ? "bg-black text-white" : "bg-white text-black"
+          )}
+          onClick={handleClosedTickets}
+        >
+          Closed Tickets (
+          {tickets.filter((ticket) => ticket.status === "closed").length})
+        </Button>
 
-          <Input
-            placeholder="Search for a ticket"
-            className="w-72"
-            value={search}
-            onChange={handleSearch}
-          />
+        <Input
+          placeholder="Search for a ticket"
+          className="w-72"
+          value={search}
+          onChange={handleSearch}
+        />
 
-          <Button onClick={check}>Search</Button>
-          <Filter className="cursor-pointer" />
-        </div>
-      )}
+        <Button onClick={check}>Search</Button>
+        <Filter className="cursor-pointer" />
+      </div>
 
       {ticketState.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 ">
