@@ -44,8 +44,8 @@ export const ticketSchema = z.object({
   title: z.string().min(10, "Please enter at least 10 characters"),
   description: z.string().min(10, "Please enter at least 10 characters"),
   status: z.enum(["open", "closed", "pending"]).default("open"),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  created_at: z.date(),
+  updated_at: z.date(),
 });
 
 export const statusArr = ["open", "closed", "pending"];

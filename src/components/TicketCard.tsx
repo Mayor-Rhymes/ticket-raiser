@@ -81,10 +81,10 @@ export const TicketCard = ({ ticket }: TicketCardProps) => {
           </Badge>
         </div>
         <div className="flex gap-2">
-          <p>Creation Date:</p> <span>{ticket.createdAt.toDateString()}</span>
+          <p>Creation Date:</p> <span>{new Date(ticket.created_at).toDateString()}</span>
         </div>
         <div className="flex gap-2">
-          <p>Last Updated At:</p> <span>{ticket.updatedAt.toDateString()}</span>
+          <p>Last Updated At:</p> <span>{new Date(ticket.updated_at).toDateString()}</span>
         </div>
 
         {/* <Button

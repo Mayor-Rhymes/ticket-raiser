@@ -17,6 +17,8 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
+import AllTickets from "./routes/home/AllTickets.tsx";
+import OpenTickets from "./routes/home/OpenTickets.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,6 +31,16 @@ const router = createBrowserRouter([
             <Home />
           </ProtectedRoute>
         ),
+        children: [
+          {
+            path: "/",
+            element: <AllTickets />
+          },
+          {
+            path: "/opentickets",
+            element: <OpenTickets />
+          }
+        ]
       },
 
       {
@@ -89,6 +101,7 @@ createRoot(document.getElementById("root")!).render(
             info: "bg-blue-400",
           },
         }}
+        richColors
       />
     </QueryClientProvider>
   </StrictMode>
