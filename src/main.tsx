@@ -19,6 +19,8 @@ import {
 } from "@tanstack/react-query";
 import AllTickets from "./routes/home/AllTickets.tsx";
 import OpenTickets from "./routes/home/OpenTickets.tsx";
+import PendingTickets from "./routes/home/PendingTickets.tsx";
+import ClosedTickets from "./routes/home/ClosedTickets.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +41,15 @@ const router = createBrowserRouter([
           {
             path: "/opentickets",
             element: <OpenTickets />
-          }
+          },
+          {
+            path: "/pendingtickets",
+            element: <PendingTickets />
+          },
+          {
+            path: "/closedtickets",
+            element: <ClosedTickets />
+          },
         ]
       },
 

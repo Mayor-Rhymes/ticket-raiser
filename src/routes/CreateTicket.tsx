@@ -24,19 +24,35 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateTicket() {
+  
+  const navigate = useNavigate();
+  const createTicket = useMutation({
+    mutationFn: (newTicket: typeof createTicketSchema) => {
+      return axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/tickets`, newTicket, {withCredentials: true})
+    },
+    onSuccess: () => {
+      navigate("/");
+    }
+  })
+
   const form = useForm<z.infer<typeof createTicketSchema>>({
     resolver: zodResolver(createTicketSchema),
     defaultValues: {
       title: "",
       description: "",
-      status: "open",
+      // status: "open",
     },
   });
 
   const onSubmit = (values: z.infer<typeof createTicketSchema>) => {
-    console.log(values);
+    // console.log(values);
+    createTicket.mutate(values as any);
+
   };
 
   return (
@@ -88,7 +104,8 @@ export default function CreateTicket() {
                 )}
               />
 
-              <FormField
+              {/* <FormField
+                disabled={true}
                 control={form.control}
                 name="status"
                 render={({ field }) => (
@@ -117,7 +134,7 @@ export default function CreateTicket() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <Button type="submit" className="py-4">
                 Create

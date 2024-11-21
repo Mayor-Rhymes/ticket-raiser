@@ -40,7 +40,7 @@ export default function Home() {
             "hover:text-white"
             // isPendingTickets ? "bg-black text-white" : "bg-white text-black"
           )}
-          // onClick={handlePendingTickets}
+          onClick={() => navigate("/pendingtickets")}
         >
           Pending Tickets
           {/* {tickets.filter((ticket) => ticket.status === "pending").length}) */}
@@ -51,7 +51,7 @@ export default function Home() {
             "hover:text-white"
             // isClosedTickets ? "bg-black text-white" : "bg-white text-black"
           )}
-          // onClick={handleClosedTickets}
+          onClick={() => navigate("/closedtickets")}
         >
           Closed Tickets
           {/* {tickets.filter((ticket) => ticket.status === "closed").length}) */}
